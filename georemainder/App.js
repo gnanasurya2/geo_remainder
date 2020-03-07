@@ -4,8 +4,6 @@ import { StyleSheet, Text, View } from "react-native";
 import { AppLoading } from "expo";
 import Color from "./constants/colors";
 
-import HomeScreen from "./screen/homeScreen";
-
 import MainNavigator from "./navigation/mainNavigation";
 // function fecthFonts() {
 //   return Fonts.loadAsync.bind({

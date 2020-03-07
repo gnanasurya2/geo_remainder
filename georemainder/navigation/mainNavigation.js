@@ -1,12 +1,14 @@
 import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
 
-import homeScreen from "../screen/homeScreen";
+import HomeScreen from "../screen/HomeScreen";
+import RemainderScreen from "../screen/RemainderScreen";
 
 import Color from "../constants/colors";
 const MainNavigator = createStackNavigator(
   {
-    home: homeScreen
+    home: HomeScreen,
+    remainder: RemainderScreen
   },
   {
     defaultNavigationOptions: {
