@@ -1,7 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 // import * as Fonts from "expo-font";
-import { AppLoading } from "expo";
+// import { AppLoading } from "expo";
 import Color from "./constants/colors";
 import MainNavigator from "./navigation/mainNavigation";
 // function fecthFonts() {

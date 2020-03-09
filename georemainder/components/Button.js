@@ -11,7 +11,6 @@ import {
   StyleSheet
 } from "react-native";
 
-import Color from "../constants/colors";
 //props are the variable which are passed from other files.
 function Button(props) {
   let Touchable = TouchableNativeFeedback;

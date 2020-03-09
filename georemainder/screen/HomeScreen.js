@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { Calendar } from "react-native-calendars";
 import Button from "../components/Button";
 

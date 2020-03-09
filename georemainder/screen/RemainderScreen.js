@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   View,
-  Text,
   StyleSheet,
   Dimensions,
   Alert,
@@ -12,9 +11,7 @@ import MapView, { Marker } from "react-native-maps";
 
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
-function ca() {
-  console.log("working");
-}
+
 function RemainderScreen(props) {
   const [mapRegion, setMapRegion] = useState({
     latitude: 23,
