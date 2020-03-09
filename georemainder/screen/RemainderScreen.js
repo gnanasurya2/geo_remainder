@@ -12,6 +12,9 @@ import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 
+import firebase from "../constants/firebase";
+
+const db = firebase.firestore().collection("remainders");
 function RemainderScreen(props) {
   const [mapRegion, setMapRegion] = useState({
     latitude: 23,
@@ -73,6 +76,16 @@ function RemainderScreen(props) {
     setFinalLocation(mark);
     console.log(finalLocation);
   }
+  async function saveRemainderHandler() {
+    await db
+      .add({
+        location: marker,
+        text: remainder
+      })
+      .then(ref => {
+        console.log(ref.id);
+      });
+  }
   return (
     <View style={styles.outer_container}>
       <MapView
@@ -101,6 +114,13 @@ function RemainderScreen(props) {
           value={remainder}
         />
       </View>
+      <View style={styles.save_container}>
+        <Button
+          title="save"
+          style={styles.save_button}
+          onPress={saveRemainderHandler}
+        />
+      </View>
     </View>
   );
 }
@@ -122,14 +142,25 @@ const styles = StyleSheet.create({
   },
   text_container: {
     width: "90%",
-    marginTop: 20
+    marginTop: 20,
+    justifyContent: "center",
+    alignItems: "center"
   },
   text: {
     width: "100%",
     height: 40,
     borderColor: "gray",
     borderWidth: 1,
-    borderRadius: 5
+    borderRadius: 5,
+    padding: 10
+  },
+  save_container: {
+    marginTop: 20,
+    borderRadius: 10
+  },
+  save_button: {
+    borderRadius: 30,
+    padding: 50
   }
 });
 export default RemainderScreen;

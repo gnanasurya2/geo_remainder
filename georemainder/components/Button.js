@@ -10,6 +10,7 @@ import {
   Platform,
   StyleSheet
 } from "react-native";
+import colors from "../constants/colors";
 
 //props are the variable which are passed from other files.
 function Button(props) {
@@ -34,8 +35,8 @@ const styles = StyleSheet.create({
     zIndex: 3,
     margin: 15,
     padding: 5,
-    backgroundColor: "white",
-    borderRadius: 20
+    backgroundColor: colors.primary,
+    borderRadius: 50
   }
 });
 //export the Button function.

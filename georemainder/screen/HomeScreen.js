@@ -1,10 +1,15 @@
 import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import { Calendar } from "react-native-calendars";
 import Button from "../components/Button";
+import Card from "../components/Card";
 
 import { Entypo } from "@expo/vector-icons";
 import Color from "../constants/colors";
+
+import firebase from "../constants/firebase";
+
+const db = firebase.firestore().collection("remainders");
 
 function homeScreen(props) {
   const [dates, setDates] = useState();
@@ -36,6 +41,12 @@ function homeScreen(props) {
           });
         }}
       />
+      <ScrollView>
+        <Card />
+        <Card />
+        <Card />
+        <Card />
+      </ScrollView>
     </View>
   );
 }
