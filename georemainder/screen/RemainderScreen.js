@@ -5,7 +5,8 @@ import {
   StyleSheet,
   Dimensions,
   Alert,
-  Button
+  Button,
+  TextInput
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
@@ -25,6 +26,7 @@ function RemainderScreen(props) {
     latitude: 23.845753230770367,
     longitude: 91.41600955277681
   });
+  const [remainder, setRemainder] = useState("");
   const [finalLocation, setFinalLocation] = useState();
   async function verifyPermissions() {
     const result = await Permissions.askAsync(Permissions.LOCATION);
@@ -95,6 +97,13 @@ function RemainderScreen(props) {
           onPress={saveLocationHandler}
         />
       </View>
+      <View style={styles.text_container}>
+        <TextInput
+          style={styles.text}
+          onChangeText={text => setRemainder(text)}
+          value={remainder}
+        />
+      </View>
     </View>
   );
 }
@@ -105,7 +114,7 @@ const styles = StyleSheet.create({
   },
   map: {
     width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height / 2
+    height: Dimensions.get("window").height / 3
   },
   button_container: {
     flexDirection: "row",
@@ -113,6 +122,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "90%",
     marginTop: 20
+  },
+  text_container: {
+    width: "90%",
+    marginTop: 20
+  },
+  text: {
+    width: "100%",
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    borderRadius: 5
   }
 });
 export default RemainderScreen;
