@@ -5,7 +5,8 @@ import {
   Dimensions,
   Alert,
   Button,
-  TextInput
+  TextInput,
+  Text
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
@@ -13,8 +14,10 @@ import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 
 import firebase from "../constants/firebase";
+import colors from "../constants/colors";
 
 const db = firebase.firestore().collection("remainders");
+
 function RemainderScreen(props) {
   const [mapRegion, setMapRegion] = useState({
     latitude: 23,
@@ -26,7 +29,8 @@ function RemainderScreen(props) {
     latitude: 23.845753230770367,
     longitude: 91.41600955277681
   });
-  const [remainder, setRemainder] = useState("");
+  const [remainderTitle, setRemainderTitle] = useState("");
+  const [remainderContent, setRemainderContent] = useState("");
   const [finalLocation, setFinalLocation] = useState();
   async function verifyPermissions() {
     const result = await Permissions.askAsync(Permissions.LOCATION);
@@ -34,7 +38,11 @@ function RemainderScreen(props) {
       Alert.alert(
         "Insufficient permissions",
         "You need to grant location permissions to use the app",
-        [{ text: "Okay" }]
+        [
+          {
+            text: "Okay"
+          }
+        ]
       );
       return false;
     }
@@ -57,7 +65,11 @@ function RemainderScreen(props) {
       Alert.alert(
         "could not fetch location",
         "Please try again later or pick a location on map",
-        [{ text: "Okay" }]
+        [
+          {
+            text: "Okay"
+          }
+        ]
       );
     }
   }
@@ -71,20 +83,23 @@ function RemainderScreen(props) {
       longitudeDelta: 0.01
     });
   }
+
   function saveLocationHandler() {
     var mark = marker;
     setFinalLocation(mark);
     console.log(finalLocation);
   }
   async function saveRemainderHandler() {
-    await db
-      .add({
-        location: marker,
-        text: remainder
-      })
-      .then(ref => {
-        console.log(ref.id);
-      });
+    await db.add({
+      location: marker,
+      title: remainderTitle,
+      content: remainderContent
+    });
+    setRemainderTitle("");
+    setRemainderContent("");
+    props.navigation.navigate({
+      routeName: "home"
+    });
   }
   return (
     <View style={styles.outer_container}>
@@ -108,10 +123,19 @@ function RemainderScreen(props) {
         />
       </View>
       <View style={styles.text_container}>
+        <Text style={styles.title}> Enter the title : </Text>
         <TextInput
           style={styles.text}
-          onChangeText={text => setRemainder(text)}
-          value={remainder}
+          onChangeText={text => setRemainderTitle(text)}
+          value={remainderTitle}
+        />
+      </View>
+      <View style={styles.text_container}>
+        <Text style={styles.title}> Enter the content : </Text>
+        <TextInput
+          style={styles.text}
+          onChangeText={text => setRemainderContent(text)}
+          value={remainderContent}
         />
       </View>
       <View style={styles.save_container}>
@@ -144,7 +168,7 @@ const styles = StyleSheet.create({
     width: "90%",
     marginTop: 20,
     justifyContent: "center",
-    alignItems: "center"
+    textAlign: "left"
   },
   text: {
     width: "100%",
@@ -161,6 +185,12 @@ const styles = StyleSheet.create({
   save_button: {
     borderRadius: 30,
     padding: 50
+  },
+  title: {
+    textAlign: "left",
+    fontSize: 20,
+    color: colors.primary,
+    marginBottom: 10
   }
 });
 export default RemainderScreen;

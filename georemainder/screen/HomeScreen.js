@@ -1,9 +1,22 @@
-import React, { useState } from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  YellowBox,
+  FlatList
+} from "react-native";
 import { Calendar } from "react-native-calendars";
 import Button from "../components/Button";
 import Card from "../components/Card";
-
+import _ from "lodash";
+YellowBox.ignoreWarnings(["Setting a timer"]);
+const _console = _.clone(console);
+console.warn = message => {
+  if (message.indexOf("Setting a timer") <= -1) {
+    _console.warn(message);
+  }
+};
 import { Entypo } from "@expo/vector-icons";
 import Color from "../constants/colors";
 
@@ -12,9 +25,10 @@ import firebase from "../constants/firebase";
 const db = firebase.firestore().collection("remainders");
 
 function homeScreen(props) {
+  const [loading, setLoading] = useState(true);
   const [dates, setDates] = useState();
   const [marked, setMarked] = useState({});
-
+  const [remainders, setRemainders] = useState([]);
   function setDateHandler(date) {
     setDates(date);
     var mark = new Object();
@@ -23,6 +37,28 @@ function homeScreen(props) {
     };
     setMarked(mark);
     console.log(date);
+  }
+  var i = 0;
+  useEffect(() => {
+    return db.onSnapshot(querySnapshot => {
+      const list = [];
+      querySnapshot.forEach(doc => {
+        const { content, location, title } = doc.data();
+        list.push({
+          id: doc.id,
+          content,
+          location,
+          title
+        });
+      });
+      setRemainders(list);
+      if (loading) {
+        setLoading(false);
+      }
+    });
+  }, []);
+  function Item({ content, location, title }) {
+    return <Card title={title} location={location} content={content} />;
   }
   return (
     <View style={styles.outer_container}>
@@ -42,10 +78,17 @@ function homeScreen(props) {
         }}
       />
       <ScrollView>
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+        <FlatList
+          data={remainders}
+          keyExtractor={item => item.id}
+          renderItem={({ item }) => (
+            <Item
+              title={item.title}
+              location={item.location}
+              content={item.content}
+            />
+          )}
+        />
       </ScrollView>
     </View>
   );

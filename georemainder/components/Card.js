@@ -16,22 +16,21 @@ function Card(props) {
     TouchableCmp = TouchableNativeFeedback;
   }
   return (
-    <TouchableCmp style={styles.outer_container}>
+    <TouchableCmp style={styles.outer_container} onPress={props.onPress}>
       <View style={styles.container}>
         <View style={styles.color_strip}></View>
         <View style={styles.remainder_container}>
           <View style={styles.remainder_title_container}>
-            <Text style={styles.remainder_title}>
-              {" "}
-              Things to buy in market{" "}
-            </Text>
+            <Text style={styles.remainder_title}>{props.title}</Text>
           </View>
           <View style={styles.remainder_date_container}>
             <Text style={styles.remainder_date_title}>Date :</Text>
-            <Text style={styles.remainder_date_content}>23-03-2020</Text>
+            <Text style={styles.remainder_date_content}>
+              {props.location.latitude}
+            </Text>
           </View>
           <View style={styles.remainder_content_container}>
-            <Text style={styles.remainder_content}>Toothpaste , Brush</Text>
+            <Text style={styles.remainder_content}>{props.content}</Text>
           </View>
         </View>
       </View>
