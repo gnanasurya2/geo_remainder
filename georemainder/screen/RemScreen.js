@@ -16,7 +16,7 @@ import * as TaskManager from "expo-task-manager";
 
 import firebase from "../constants/firebase";
 import colors from "../constants/colors";
-import { EventType } from "expo/build/Updates/Updates";
+
 //db is the variable name of the firebase database with the name of "remainders".
 const db = firebase.firestore().collection("remainders");
 //task manager is to define tasks that will in the background or when the app is closed
