@@ -4,6 +4,7 @@ import { StyleSheet, View } from "react-native";
 // import { AppLoading } from "expo";
 import Color from "./constants/colors";
 import MainNavigator from "./navigation/mainNavigation";
+
 import { decode, encode } from "base-64";
 if (!global.btoa) {
   global.btoa = encode;

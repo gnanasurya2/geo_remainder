@@ -12,12 +12,24 @@ import MapView, { Marker } from "react-native-maps";
 
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
+import * as TaskManager from "expo-task-manager";
 
 import firebase from "../constants/firebase";
 import colors from "../constants/colors";
+import { EventType } from "expo/build/Updates/Updates";
 
 const db = firebase.firestore().collection("remainders");
-
+TaskManager.defineTask("g", ({ data: { eventType, region }, error }) => {
+  if (error) {
+    console.log(error);
+    return;
+  }
+  if (eventType === Location.GeofencingEventType.Enter) {
+    console.log("You've entered region:", region);
+  } else if (eventType === Location.GeofencingEventType.Exit) {
+    console.log("You've left region:", region);
+  }
+});
 function RemainderScreen(props) {
   const [mapRegion, setMapRegion] = useState({
     latitude: 23,
@@ -31,7 +43,6 @@ function RemainderScreen(props) {
   });
   const [remainderTitle, setRemainderTitle] = useState("");
   const [remainderContent, setRemainderContent] = useState("");
-  const [finalLocation, setFinalLocation] = useState();
   async function verifyPermissions() {
     const result = await Permissions.askAsync(Permissions.LOCATION);
     if (result.status !== "granted") {
@@ -61,7 +72,20 @@ function RemainderScreen(props) {
         latitudeDelta: 0.01,
         longitudeDelta: 0.01
       });
+      await Location.startGeofencingAsync("g", [
+        {
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+          radius: 30
+        },
+        {
+          latitude: location.coords.latitude - 2,
+          longitude: location.coords.longitude - 2,
+          radius: 30
+        }
+      ]);
     } catch (err) {
+      console.log(err);
       Alert.alert(
         "could not fetch location",
         "Please try again later or pick a location on map",
@@ -84,22 +108,21 @@ function RemainderScreen(props) {
     });
   }
 
-  function saveLocationHandler() {
-    var mark = marker;
-    setFinalLocation(mark);
-    console.log(finalLocation);
-  }
   async function saveRemainderHandler() {
-    await db.add({
-      location: marker,
-      title: remainderTitle,
-      content: remainderContent
-    });
+    if (remainderTitle != "") {
+      await db.add({
+        location: marker,
+        title: remainderTitle,
+        content: remainderContent
+      });
+    }
     setRemainderTitle("");
     setRemainderContent("");
-    props.navigation.navigate({
-      routeName: "home"
-    });
+    console.log(await TaskManager.getRegisteredTasksAsync());
+    console.log();
+    // props.navigation.navigate({
+    //   routeName: "home"
+    // });
   }
   return (
     <View style={styles.outer_container}>
@@ -116,14 +139,9 @@ function RemainderScreen(props) {
           onPress={locationHandler}
           style={styles.button}
         />
-        <Button
-          title="save location"
-          style={styles.button}
-          onPress={saveLocationHandler}
-        />
       </View>
       <View style={styles.text_container}>
-        <Text style={styles.title}> Enter the title : </Text>
+        <Text style={styles.title}> Enter the title: </Text>
         <TextInput
           style={styles.text}
           onChangeText={text => setRemainderTitle(text)}
@@ -131,7 +149,7 @@ function RemainderScreen(props) {
         />
       </View>
       <View style={styles.text_container}>
-        <Text style={styles.title}> Enter the content : </Text>
+        <Text style={styles.title}> Enter the content: </Text>
         <TextInput
           style={styles.text}
           onChangeText={text => setRemainderContent(text)}
@@ -148,6 +166,7 @@ function RemainderScreen(props) {
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   outer_container: {
     flex: 1,
