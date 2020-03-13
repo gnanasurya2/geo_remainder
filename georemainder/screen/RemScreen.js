@@ -17,8 +17,10 @@ import * as TaskManager from "expo-task-manager";
 import firebase from "../constants/firebase";
 import colors from "../constants/colors";
 import { EventType } from "expo/build/Updates/Updates";
-
+//db is the variable name of the firebase database with the name of "remainders".
 const db = firebase.firestore().collection("remainders");
+//task manager is to define tasks that will in the background or when the app is closed
+//the first variable is the name of the task and second one is a function which will execute when there is any changes in the task
 TaskManager.defineTask("g", ({ data: { eventType, region }, error }) => {
   if (error) {
     console.log(error);
@@ -27,10 +29,11 @@ TaskManager.defineTask("g", ({ data: { eventType, region }, error }) => {
   if (eventType === Location.GeofencingEventType.Enter) {
     console.log("You've entered region:", region);
   } else if (eventType === Location.GeofencingEventType.Exit) {
-    console.log("You've left region:", region);
+    console.log("I did this:", region);
   }
 });
 function RemainderScreen(props) {
+  //List of useState hooks
   const [mapRegion, setMapRegion] = useState({
     latitude: 23,
     longitude: 9,
@@ -43,6 +46,7 @@ function RemainderScreen(props) {
   });
   const [remainderTitle, setRemainderTitle] = useState("");
   const [remainderContent, setRemainderContent] = useState("");
+  //The below function is to get permission for location from the user using expo-permission and this is a async function which means that the compiler waits for the function to get over in a separate thread rather than in a main thread.
   async function verifyPermissions() {
     const result = await Permissions.askAsync(Permissions.LOCATION);
     if (result.status !== "granted") {
@@ -59,6 +63,7 @@ function RemainderScreen(props) {
     }
     return true;
   }
+  //The below function is to get locations from user using expo-locations package.
   async function locationHandler() {
     const hasPermissions = await verifyPermissions();
     if (!hasPermissions) return;
@@ -72,6 +77,8 @@ function RemainderScreen(props) {
         latitudeDelta: 0.01,
         longitudeDelta: 0.01
       });
+      console.log(await TaskManager.getRegisteredTasksAsync());
+      //The below function is to start geo fencing both in the foreground and in the background as well. We have to pass as array of objects as parameter.
       await Location.startGeofencingAsync("g", [
         {
           latitude: location.coords.latitude,
@@ -81,6 +88,11 @@ function RemainderScreen(props) {
         {
           latitude: location.coords.latitude - 2,
           longitude: location.coords.longitude - 2,
+          radius: 30
+        },
+        {
+          latitude: location.coords.latitude - 10,
+          longitude: location.coords.longitude - 20,
           radius: 30
         }
       ]);
@@ -97,7 +109,7 @@ function RemainderScreen(props) {
       );
     }
   }
-
+  //The below function is to detect touch on map and place a marker on te clicked location and move the map to focus on the marker.
   function pressHandler(event) {
     setMarker(event.nativeEvent.coordinate);
     setMapRegion({
@@ -107,9 +119,10 @@ function RemainderScreen(props) {
       longitudeDelta: 0.01
     });
   }
-
+  //The below function is add the remainder to the database with location , title and content
+  //db is variable name of the firebase database.
   async function saveRemainderHandler() {
-    if (remainderTitle != "") {
+    if (remainderTitle != "" && remainderContent != "") {
       await db.add({
         location: marker,
         title: remainderTitle,
@@ -124,6 +137,7 @@ function RemainderScreen(props) {
     //   routeName: "home"
     // });
   }
+  //MapView is the tag which renders the map google and it takes Marker as it children.
   return (
     <View style={styles.outer_container}>
       <MapView
@@ -166,7 +180,7 @@ function RemainderScreen(props) {
     </View>
   );
 }
-
+//Stylesheet for the app
 const styles = StyleSheet.create({
   outer_container: {
     flex: 1,

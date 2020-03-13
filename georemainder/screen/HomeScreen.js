@@ -10,6 +10,7 @@ import { Calendar } from "react-native-calendars";
 import Button from "../components/Button";
 import Card from "../components/Card";
 import _ from "lodash";
+//This is to ignore warnings about delay of receiving data from firebase.
 YellowBox.ignoreWarnings(["Setting a timer"]);
 const _console = _.clone(console);
 console.warn = message => {
@@ -17,11 +18,12 @@ console.warn = message => {
     _console.warn(message);
   }
 };
+//Entypo is a package containing all vectors icons.
 import { Entypo } from "@expo/vector-icons";
 import Color from "../constants/colors";
 
 import firebase from "../constants/firebase";
-
+//db is variable containing database.
 const db = firebase.firestore().collection("remainders");
 
 function homeScreen(props) {
@@ -29,6 +31,7 @@ function homeScreen(props) {
   const [dates, setDates] = useState();
   const [marked, setMarked] = useState({});
   const [remainders, setRemainders] = useState([]);
+
   function setDateHandler(date) {
     setDates(date);
     var mark = new Object();
@@ -39,6 +42,7 @@ function homeScreen(props) {
     console.log(date);
   }
   var i = 0;
+  //useEffect is a react hooks which executes the function after every render cycle and it takes a second argument which determines when to execute the function (an empty array represents that the function execute only once).
   useEffect(() => {
     return db.onSnapshot(querySnapshot => {
       const list = [];
@@ -60,6 +64,7 @@ function homeScreen(props) {
   function Item({ content, location, title }) {
     return <Card title={title} location={location} content={content} />;
   }
+  //FlatList is to dynamically populate the list using a function.
   return (
     <View style={styles.outer_container}>
       <View style={styles.container}>
@@ -93,7 +98,7 @@ function homeScreen(props) {
     </View>
   );
 }
-
+//Stylesheet for the app
 const styles = StyleSheet.create({
   outer_container: {
     flex: 1
