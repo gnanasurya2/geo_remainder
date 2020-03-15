@@ -8,9 +8,7 @@ function LoginScreen(props) {
   function signUpHandler() {
     if (email != "" && password != "") {
       if (password.length >= 6) {
-        db.createUserWithEmailAndPassword(email, password).then(function(
-          error
-        ) {
+        db.createUserWithEmailAndPassword(email, password).then(function() {
           Alert.alert("try again", [
             {
               text: "okay"
@@ -29,8 +27,12 @@ function LoginScreen(props) {
     }
   }
   function loginHandler() {
-    db.signInWithEmailAndPassword(email, password);
-    console.log(this.user);
+    db.signInWithEmailAndPassword(email, password).then(function(user) {
+      console.log(user.user.email);
+      props.navigation.navigate({
+        routeName: "home"
+      });
+    });
   }
   return (
     <View style={styles.outer_container}>

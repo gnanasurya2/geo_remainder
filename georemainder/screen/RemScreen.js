@@ -18,7 +18,7 @@ import firebase from "../constants/firebase";
 import colors from "../constants/colors";
 
 //db is the variable name of the firebase database with the name of "remainders".
-const db = firebase.firestore().collection("remainders");
+const db = firebase.firestore().collection(firebase.auth().currentUser.email);
 //task manager is to define tasks that will in the background or when the app is closed
 //the first variable is the name of the task and second one is a function which will execute when there is any changes in the task
 TaskManager.defineTask("g", ({ data: { eventType, region }, error }) => {

@@ -10,8 +10,10 @@ import HomeScreen from "../screen/HomeScreen";
 import RemainderScreen from "../screen/RemScreen";
 
 import Color from "../constants/colors";
+import LoginScreen from "../screen/LoginScreen";
 const MainNavigator = createStackNavigator({
   //syntax : display_name:screen_name
+  login: LoginScreen,
   home: HomeScreen,
   remainder: RemainderScreen
 }, {

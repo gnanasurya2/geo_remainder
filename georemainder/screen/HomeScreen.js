@@ -24,7 +24,7 @@ import Color from "../constants/colors";
 
 import firebase from "../constants/firebase";
 //db is variable containing database.
-const db = firebase.firestore().collection("remainders");
+const db = firebase.firestore().collection(firebase.auth().currentUser.email);
 
 function homeScreen(props) {
   const [loading, setLoading] = useState(true);

@@ -25,7 +25,7 @@ export default function App() {
     //View component is similar to that of div in HTML.
     //mainNavigator is navigation tag which we will use in the app .It's a custom component which is imported in line 6.
     <View style={styles.container}>
-      <LoginScreen />
+      <MainNavigator />
     </View>
   );
 }
