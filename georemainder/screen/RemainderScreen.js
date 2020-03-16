@@ -1,6 +1,4 @@
-import React, {
-  useState
-} from "react";
+import React, { useState } from "react";
 import {
   View,
   StyleSheet,
@@ -10,9 +8,7 @@ import {
   TextInput,
   Text
 } from "react-native";
-import MapView, {
-  Marker
-} from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
@@ -22,22 +18,18 @@ import firebase from "../constants/firebase";
 import colors from "../constants/colors";
 
 //db is the variable name of the firebase database with the name of "remainders".
-const db = firebase.firestore().collection(firebase.auth().currentUser.email);
+if (firebase.auth().currentUser) {
+  const db = firebase.firestore().collection("gnanasurya2@gmail.com");
+}
 //task manager is to define tasks that will in the background or when the app is closed
 //the first variable is the name of the task and second one is a function which will execute when there is any changes in the task
-TaskManager.defineTask("g", ({
-  data: {
-    eventType,
-    region
-  },
-  error
-}) => {
+TaskManager.defineTask("g", ({ data: { eventType, region }, error }) => {
   if (error) {
     console.log(error);
     return;
   }
   if (eventType === Location.GeofencingEventType.Enter) {
-    console.log("You've entered region:", region);
+    Alert.alert("You have entered", region);
   } else if (eventType === Location.GeofencingEventType.Exit) {
     console.log("I did this:", region);
   }
@@ -64,9 +56,11 @@ function RemainderScreen(props) {
       Alert.alert(
         "Insufficient permissions",
         "You need to grant location permissions to use the app",
-        [{
-          text: "Okay"
-        }]
+        [
+          {
+            text: "Okay"
+          }
+        ]
       );
       return false;
     }
@@ -88,7 +82,8 @@ function RemainderScreen(props) {
       });
       console.log(await TaskManager.getRegisteredTasksAsync());
       //The below function is to start geo fencing both in the foreground and in the background as well. We have to pass as array of objects as parameter.
-      await Location.startGeofencingAsync("g", [{
+      await Location.startGeofencingAsync("g", [
+        {
           latitude: location.coords.latitude,
           longitude: location.coords.longitude,
           radius: 30
@@ -109,9 +104,11 @@ function RemainderScreen(props) {
       Alert.alert(
         "could not fetch location",
         "Please try again later or pick a location on map",
-        [{
-          text: "Okay"
-        }]
+        [
+          {
+            text: "Okay"
+          }
+        ]
       );
     }
   }
@@ -144,89 +141,46 @@ function RemainderScreen(props) {
     // });
   }
   //MapView is the tag which renders the map google and it takes Marker as it children.
-  return ( <
-    View style = {
-      styles.outer_container
-    } >
-    <
-    MapView style = {
-      styles.map
-    }
-    region = {
-      mapRegion
-    }
-    onPress = {
-      event => pressHandler(event)
-    } >
-    <
-    Marker coordinate = {
-      marker
-    }
-    /> <
-    /MapView> <
-    View style = {
-      styles.button_container
-    } >
-    <
-    Button title = "get my location"
-    onPress = {
-      locationHandler
-    }
-    style = {
-      styles.button
-    }
-    /> <
-    /View> <
-    View style = {
-      styles.text_container
-    } >
-    <
-    Text style = {
-      styles.title
-    } > Enter the title: < /Text> <
-    TextInput style = {
-      styles.text
-    }
-    onChangeText = {
-      text => setRemainderTitle(text)
-    }
-    value = {
-      remainderTitle
-    }
-    /> <
-    /View> <
-    View style = {
-      styles.text_container
-    } >
-    <
-    Text style = {
-      styles.title
-    } > Enter the content: < /Text> <
-    TextInput style = {
-      styles.text
-    }
-    onChangeText = {
-      text => setRemainderContent(text)
-    }
-    value = {
-      remainderContent
-    }
-    /> <
-    /View> <
-    View style = {
-      styles.save_container
-    } >
-    <
-    Button title = "save"
-    style = {
-      styles.save_button
-    }
-    onPress = {
-      saveRemainderHandler
-    }
-    /> <
-    /View> <
-    /View>
+  return (
+    <View style={styles.outer_container}>
+      <MapView
+        style={styles.map}
+        region={mapRegion}
+        onPress={event => pressHandler(event)}
+      >
+        <Marker coordinate={marker} />
+      </MapView>
+      <View style={styles.button_container}>
+        <Button
+          title="get my location"
+          onPress={locationHandler}
+          style={styles.button}
+        />
+      </View>
+      <View style={styles.text_container}>
+        <Text style={styles.title}> Enter the title: </Text>
+        <TextInput
+          style={styles.text}
+          onChangeText={text => setRemainderTitle(text)}
+          value={remainderTitle}
+        />
+      </View>
+      <View style={styles.text_container}>
+        <Text style={styles.title}> Enter the content: </Text>
+        <TextInput
+          style={styles.text}
+          onChangeText={text => setRemainderContent(text)}
+          value={remainderContent}
+        />
+      </View>
+      <View style={styles.save_container}>
+        <Button
+          title="save"
+          style={styles.save_button}
+          onPress={saveRemainderHandler}
+        />
+      </View>
+    </View>
   );
 }
 //Stylesheet for the app

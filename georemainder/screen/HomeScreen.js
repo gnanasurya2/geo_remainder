@@ -24,9 +24,9 @@ import Color from "../constants/colors";
 
 import firebase from "../constants/firebase";
 //db is variable containing database.
-var email = firebase.auth().currentUser.email;
-const db = firebase.firestore().collection(email);
-
+console.log("homescreen", firebase.auth().currentUser);
+if (firebase.auth().currentUser) {
+}
 function homeScreen(props) {
   const [loading, setLoading] = useState(true);
   const [dates, setDates] = useState();
@@ -45,6 +45,8 @@ function homeScreen(props) {
   var i = 0;
   //useEffect is a react hooks which executes the function after every render cycle and it takes a second argument which determines when to execute the function (an empty array represents that the function execute only once).
   useEffect(() => {
+    var email = firebase.auth().currentUser.email;
+    const db = firebase.firestore().collection(email);
     return db.onSnapshot(querySnapshot => {
       const list = [];
       querySnapshot.forEach(doc => {

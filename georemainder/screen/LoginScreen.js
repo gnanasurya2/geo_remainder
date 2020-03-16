@@ -29,7 +29,7 @@ function LoginScreen(props) {
   }
   function loginHandler() {
     db.signInWithEmailAndPassword(email, password).then(function(user) {
-      console.log(user.user.email);
+      console.log("loginscreen", user.user.email);
       props.navigation.navigate({
         routeName: "home"
       });
