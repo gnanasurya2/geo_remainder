@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "geoRemainder",
-    "slug": "georemainder",
+    "name": "Geo Remainder",
+    "slug": "geoRemainder",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": [
@@ -25,6 +25,10 @@
     ],
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.gnanasurya.GeoRemainder",
+      "versionCode": 1
     }
   }
 }

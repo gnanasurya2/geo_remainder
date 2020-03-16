@@ -1,10 +1,11 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, AppRegistry } from "react-native";
 // import * as Fonts from "expo-font";
 // import { AppLoading } from "expo";
 import Color from "./constants/colors";
 import MainNavigator from "./navigation/mainNavigation";
 import LoginScreen from "./screen/LoginScreen";
+AppRegistry.registerComponent("Geo Remainder", () => App);
 import { decode, encode } from "base-64";
 if (!global.btoa) {
   global.btoa = encode;
