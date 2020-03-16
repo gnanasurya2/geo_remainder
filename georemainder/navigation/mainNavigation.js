@@ -7,7 +7,7 @@ import {
 } from "react-navigation";
 // import all the screen that you are going to use in the app to add it into navigator.
 import HomeScreen from "../screen/HomeScreen";
-import RemainderScreen from "../screen/RemScreen";
+import RemainderScreen from "../screen/RemainderScreen";
 
 import Color from "../constants/colors";
 import LoginScreen from "../screen/LoginScreen";
