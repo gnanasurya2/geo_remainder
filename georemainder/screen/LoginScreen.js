@@ -98,7 +98,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderRadius: 7,
     borderWidth: 2,
-    borderColor: "green"
+    borderColor: "green",
+    paddingLeft: 10
   },
   button_container: {
     width: "100%",

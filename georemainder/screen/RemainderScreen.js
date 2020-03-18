@@ -19,11 +19,11 @@ import colors from "../constants/colors";
 
 //db is the variable name of the firebase database with the name of "remainders".
 if (firebase.auth().currentUser) {
-  const db = firebase.firestore().collection("gnanasurya2@gmail.com");
+  const db = firebase.firestore().collection(firebase.auth().currentUser.email);
 }
 //task manager is to define tasks that will in the background or when the app is closed
 //the first variable is the name of the task and second one is a function which will execute when there is any changes in the task
-TaskManager.defineTask("g", ({ data: { eventType, region }, error }) => {
+TaskManager.defineTask("geo", ({ data: { eventType, region }, error }) => {
   if (error) {
     console.log(error);
     return;
@@ -82,7 +82,7 @@ function RemainderScreen(props) {
       });
       console.log(await TaskManager.getRegisteredTasksAsync());
       //The below function is to start geo fencing both in the foreground and in the background as well. We have to pass as array of objects as parameter.
-      await Location.startGeofencingAsync("g", [
+      await Location.startGeofencingAsync("geo", [
         {
           latitude: location.coords.latitude,
           longitude: location.coords.longitude,
