@@ -3,11 +3,12 @@ import {
   createStackNavigator
 } from "react-navigation-stack";
 import {
-  createAppContainer
+  createAppContainer,
 } from "react-navigation";
 // import all the screen that you are going to use in the app to add it into navigator.
 import HomeScreen from "../screen/HomeScreen";
 import RemainderScreen from "../screen/RemainderScreen";
+import Login from "../screen/Login";
 
 import Color from "../constants/colors";
 import LoginScreen from "../screen/LoginScreen";
